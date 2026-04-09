@@ -2,3 +2,92 @@ The sources provided include all current code for the Rhynn client and server (b
 Please refer to the wiki on github for instructions on how to build the software and further documentation: https://github.com/marlowe-fw/Rhynn/wiki
 
 You find the official Rhynn homepage on http://www.rhynn.com
+
+## Installation
+
+### Prerequisites
+- Ubuntu 24.04 or similar Linux distribution
+- C++ compiler (g++)
+- Premake4 build system
+- MySQL server
+- MySQL++ C++ connector
+- Qt5 development libraries
+- PHP
+- Apache web server
+
+### Installing Dependencies
+Run the following commands to install required packages:
+
+```bash
+sudo apt update
+sudo apt install -y build-essential premake4 mysql-server libmysql++-dev qtbase5-dev php apache2 libapache2-mod-php
+```
+Alternatively, run the provided install.sh script:
+
+```bash
+./install.sh
+```
+
+After installing dependencies, run the setup.sh script to complete database setup, server build, and worldbuilder configuration:
+
+```bash
+./setup.sh
+```
+### Database Setup
+1. Start MySQL service: `sudo systemctl start mysql`
+2. Secure MySQL installation: `sudo mysql_secure_installation`
+3. Create databases and load data:
+   ```bash
+   cd server/MinServer/_db
+   mysql -u root -p < init.sql
+   mysql -u root -p fw_core < fw_core.sql
+   mysql -u root -p fws_messages < fws_messages.sql
+   ```
+   Note: The default configuration uses MySQL user 'root' with password 'xypass12'. Update `config.txt` and PHP files if using different credentials.
+
+### Building the Server
+1. Navigate to the server directory: `cd server/MinServer`
+2. Generate Makefiles: `premake4 gmake`
+3. Build: `make`
+
+### Setting up Worldbuilder (Web Interface)
+1. Copy the worldbuilder directory to your web root: `sudo cp -r worldbuilder /var/www/html/`
+2. Ensure Apache is running: `sudo systemctl start apache2`
+3. Access via browser at `http://localhost/worldbuilder`
+4. Update database credentials in `modules/DBC.php` if necessary (default: root/xypass12)
+
+### Client
+The client build process is similar to the server. Refer to the wiki for detailed instructions.
+
+## Project Structure
+
+- **client/**: Contains the client-side application code for Rhynn.
+  - **FWClient/**: Main client executable and core logic.
+  - **FWClientData/**: Handles client-side data management.
+  - **FWClientGraphics/**: Manages graphics rendering and assets.
+  - **FWClientNet/**: Network communication layer for the client.
+  - **FWClientSound/**: Audio handling and sound effects.
+  - **FWClientUtils/**: Utility functions and helpers for the client.
+
+- **server/**: Server-side components for Rhynn.
+  - **MinServer/**: Main server directory containing build configuration, database schemas, and core modules.
+    - **_db/**: Database initialization scripts and schemas.
+    - **FWDBMapper/**: Tool for mapping database fields (includes UI components).
+    - **FWMessageGenerator/**: Generates message handling code from database (includes UI).
+    - **FWServer/**: Core server logic, client handling, modules for characters, items, quests, etc.
+    - **FWServerLauncher/**: Launcher application for starting the server.
+    - **FWShutdown/**: Shutdown utility.
+    - **FWUtil/**: Server-side utilities and common code.
+    - **FWWorld/**: World simulation and logic.
+    - **FWWorldGraphics/**: Server-side graphics assets.
+    - **MinServer/**: Core server library.
+    - **qt_buildrules/**: Qt-specific build rules.
+
+- **worldbuilder/**: Web-based world editor tool built with PHP.
+  - **css/**: Stylesheets for the web interface.
+  - **FWWorldGraphics/**: Graphics assets for the world builder.
+  - **handlers/**: PHP handlers for queries and data storage.
+  - **img/**: Image assets.
+  - **js/**: JavaScript files for client-side functionality.
+  - **modules/**: PHP modules for database connections, queries, and storage.
+  - **ui_elements/**: UI components and dialogs.

@@ -1,0 +1,117 @@
+# C++ build artifacts
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+bin/
+build/
+obj/
+Debug/
+Release/
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.log
+*.svclog
+*.scc
+
+# Qt specific
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+ui_*.h
+*.pro.user
+*.qbs.user
+*.qbs.user.*
+*.moc
+Makefile*
+
+# Premake
+Makefile
+*.make
+
+# PHP
+vendor/
+composer.lock
+*.log
+cache/
+tmp/
+logs/
+error_log
+*.cache
+
+# MySQL
+*.sql.bak
+*.frm
+*.MYD
+*.MYI
+*.ibd
+*.ibdata*
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.stackdump
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Node.js (if any)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python (if any)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Database dumps
+*.sql.gz
+*.sql.zip
+
+# Secrets
+config.local.*
+secrets.json
