@@ -11,6 +11,8 @@ You find the official Rhynn homepage on http://www.rhynn.com
 - Premake4 build system
 - MySQL server
 - MySQL++ C++ connector
+- Boost development libraries
+- Node.js and npm
 - Qt5 development libraries
 - PHP
 - Apache web server
@@ -20,7 +22,7 @@ Run the following commands to install required packages:
 
 ```bash
 sudo apt update
-sudo apt install -y build-essential premake4 mysql-server libmysql++-dev qtbase5-dev php apache2 libapache2-mod-php
+sudo apt install -y build-essential premake4 mysql-server libmysql++-dev libboost-dev libboost-regex-dev qtbase5-dev php apache2 libapache2-mod-php nodejs npm
 ```
 Alternatively, run the provided install.sh script:
 
@@ -34,16 +36,21 @@ After installing dependencies, run the setup.sh script to complete database setu
 ./setup.sh
 ```
 ### Database Setup
-1. Start MySQL service: `sudo systemctl start mysql`
-2. Secure MySQL installation: `sudo mysql_secure_installation`
-3. Create databases and load data:
+1. Start MySQL service: `sudo service mysql start`
+2. Load the schema and data:
    ```bash
    cd server/MinServer/_db
-   mysql -u root -p < init.sql
-   mysql -u root -p fw_core < fw_core.sql
-   mysql -u root -p fws_messages < fws_messages.sql
+   sudo mysql < init.sql
+   sudo mysql fw_core < fw_core.sql
+   sudo mysql fws_messages < fws_messages.sql
    ```
-   Note: The default configuration uses MySQL user 'root' with password 'xypass12'. Update `config.txt` and PHP files if using different credentials.
+3. Create the dedicated Rhynn database user:
+   ```bash
+   sudo mysql -e "CREATE USER IF NOT EXISTS 'rhynn'@'localhost' IDENTIFIED BY 'xypass12'; GRANT ALL PRIVILEGES ON fw_core.* TO 'rhynn'@'localhost'; GRANT ALL PRIVILEGES ON fws_messages.* TO 'rhynn'@'localhost'; FLUSH PRIVILEGES;"
+   ```
+4. Configure the server to use the `rhynn` user and password in `server/MinServer/config.txt`.
+
+Note: If you prefer to use Apache for the worldbuilder, update `modules/DBC.php` with the correct database credentials.
 
 ### Building the Server
 1. Navigate to the server directory: `cd server/MinServer`
@@ -51,13 +58,36 @@ After installing dependencies, run the setup.sh script to complete database setu
 3. Build: `make`
 
 ### Setting up Worldbuilder (Web Interface)
-1. Copy the worldbuilder directory to your web root: `sudo cp -r worldbuilder /var/www/html/`
-2. Ensure Apache is running: `sudo systemctl start apache2`
-3. Access via browser at `http://localhost/worldbuilder`
-4. Update database credentials in `modules/DBC.php` if necessary (default: root/xypass12)
+1. The worldbuilder can be run locally with PHP's built-in server:
+   ```bash
+   cd worldbuilder
+   php -S 127.0.0.1:8000
+   ```
+2. Open `http://127.0.0.1:8000` in your browser.
+3. If you prefer Apache, copy the directory to your web root and start apache:
+   ```bash
+   sudo cp -r worldbuilder /var/www/html/
+   sudo service apache2 start
+   ```
+4. Update database credentials in `modules/DBC.php` if necessary.
 
 ### Client
 The client build process is similar to the server. Refer to the wiki for detailed instructions.
+
+### Running the full stack
+After installing dependencies and setting up the database, start the three components:
+
+- Server: `cd server/MinServer && ./ServerStart`
+- Worldbuilder: `cd worldbuilder && php -S 127.0.0.1:8000`
+- Webclient: `cd webclient && npx http-server -p 3000`
+
+Alternatively, run the helper script from the repository root:
+
+```bash
+./run_all.sh
+```
+
+Then open the browser at `http://127.0.0.1:8000` for the worldbuilder and `http://127.0.0.1:3000` for the webclient.
 
 ## Project Structure
 
@@ -92,4 +122,4 @@ The client build process is similar to the server. Refer to the wiki for detaile
   - **modules/**: PHP modules for database connections, queries, and storage.
   - **ui_elements/**: UI components and dialogs.
 
-- **webclient/**: Web-based client application using Phaser.js framework, designed as a standalone browser app that communicates with the server.
+- **webclient/**: Web-based client application using Phaser.js framework, designed as a standalone browser prototype. Full original Rhynn server protocol support requires an additional proxy or socket bridge.

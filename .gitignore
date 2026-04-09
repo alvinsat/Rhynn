@@ -11,6 +11,8 @@ build/
 obj/
 Debug/
 Release/
+server/MinServer/ServerStart
+server/MinServer/ServerStop
 *.user
 *.aps
 *.pch

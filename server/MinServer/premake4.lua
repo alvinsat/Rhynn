@@ -31,7 +31,7 @@ solution "FWServer"
         targetname "rhynn-fwutil"       
         includedirs {
             "/usr/include/mysql",
-            "/usr/local/include/mysql++",
+            "/usr/include/mysql++",
         }
         files {
             "./FWUtil/**.h","./FWUtil/**.cpp"
@@ -45,7 +45,7 @@ solution "FWServer"
         includedirs {
             "./FWUtil",
             "/usr/include/mysql",
-            "/usr/local/include/mysql++",
+            "/usr/include/mysql++",
         }
         libdirs {
             "/usr/local/lib"
@@ -71,7 +71,7 @@ solution "FWServer"
             "./FWUtil",
             "./FWWorld",
             "/usr/include/mysql",
-            "/usr/local/include/mysql++",
+            "/usr/include/mysql++",
             "/usr/local/include"
         }
         libdirs {
@@ -101,7 +101,7 @@ solution "FWServer"
             "./FWWorld",
             "./FWServer",
             "/usr/include/mysql",
-            "/usr/local/include/mysql++",
+            "/usr/include/mysql++",
             "/usr/local/include"
         }
         libdirs {
