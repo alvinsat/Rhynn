@@ -91,3 +91,5 @@ The client build process is similar to the server. Refer to the wiki for detaile
   - **js/**: JavaScript files for client-side functionality.
   - **modules/**: PHP modules for database connections, queries, and storage.
   - **ui_elements/**: UI components and dialogs.
+
+- **webclient/**: Web-based client application using Phaser.js framework, designed as a standalone browser app that communicates with the server.
